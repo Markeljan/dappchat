@@ -14,9 +14,6 @@ export interface ChatMessageProps {
 }
 
 export function ChatMessage({ message, ...props }: ChatMessageProps) {
-  if (message.name === 'fetch_abi') {
-    return null;
-  }
 
   return (
     <div
