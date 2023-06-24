@@ -42,20 +42,20 @@ export default function RootLayout({ children }: RootLayoutProps) {
           fontMono.variable
         )}
       >
-        <ClientLayout >
-          <Toaster />
-          <Providers attribute="class" defaultTheme="system" enableSystem>
-            <div className="flex flex-col min-h-screen">
-              {/* @ts-ignore */}
-
-              <Header />
-              <main className="flex flex-col flex-1 bg-muted/50">
+        <Toaster />
+        <Providers attribute="class" defaultTheme="system" enableSystem>
+          <div className="flex flex-col min-h-screen">
+            {/* @ts-ignore */}
+            <main className="flex flex-col flex-1 bg-muted/50">
+              <ClientLayout>
+                <Header />
                 {children}
-              </main>
-            </div>
-            <TailwindIndicator />
-          </Providers>
-        </ClientLayout>
+              </ClientLayout>
+            </main>
+          </div>
+          <TailwindIndicator />
+        </Providers>
+
       </body>
     </html>
   )
