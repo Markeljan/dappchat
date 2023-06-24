@@ -5,15 +5,19 @@ import remarkMath from 'remark-math'
 import { cn } from '@/lib/utils'
 import { CodeBlock } from '@/components/ui/codeblock'
 import { MemoizedReactMarkdown } from '@/components/markdown'
-import {IconF, IconOpenAI, IconUser} from '@/components/ui/icons'
+import { IconF, IconOpenAI, IconUser } from '@/components/ui/icons'
 import { ChatMessageActions } from '@/components/chat-message-actions'
-import {Message} from "@/ai-sdk/packages/core/shared/types";
+import { Message } from "@/ai-sdk/packages/core/shared/types";
 
 export interface ChatMessageProps {
   message: Message
 }
 
 export function ChatMessage({ message, ...props }: ChatMessageProps) {
+  if (message.name === 'fetch_abi') {
+    return null;
+  }
+
   return (
     <div
       className={cn('group relative mb-4 flex items-start md:-ml-12')}
@@ -69,7 +73,7 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
             }
           }}
         >
-          {(message.content === '') ? (typeof message.function_call === 'string' ? message.function_call : JSON.stringify(message.function_call) ) : message.content ?? ''}
+          {(message.content === '') ? (typeof message.function_call === 'string' ? message.function_call : JSON.stringify(message.function_call)) : message.content ?? ''}
         </MemoizedReactMarkdown>
         <ChatMessageActions message={message} />
       </div>

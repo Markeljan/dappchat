@@ -15,6 +15,8 @@ import {Message} from "@/ai-sdk/packages/core/shared/types";
 import {FunctionCallHandler, OpenAIChatRequest, useChat} from "@/ai-sdk/packages/core/react";
 import {ChatCompletionFunctions, ChatCompletionRequestMessageFunctionCall} from "openai-edge";
 import {nanoid} from "nanoid";
+import { fetchAbi } from '@/lib/hooks/use-fetch-abi'
+import { getChainByName } from '@/lib/viemUtils'
 
 const IS_PREVIEW = process.env.VERCEL_ENV === 'preview'
 
@@ -23,27 +25,38 @@ export interface ChatProps extends React.ComponentProps<'div'> {
     id?: string
 }
 
-
 const functionCallHandler: FunctionCallHandler = async (functionCall: ChatCompletionRequestMessageFunctionCall, chatRequest: OpenAIChatRequest) => {
-    // if (functionCall.name === 'get_current_weather') {
-
     if (functionCall.arguments != null) {
         const parsedFunctionCallArguments = JSON.parse(functionCall.arguments);
-        console.log(parsedFunctionCallArguments);
-        // You now have access to the parsed arguments here (assuming the JSON was valid)
-        // If JSON is invalid, return an appropriate message to the model so that it may retry?
+        const chain = getChainByName(parsedFunctionCallArguments.chain);
+        try {
+            const abi = await fetchAbi(chain, parsedFunctionCallArguments.address);
+            return Promise.resolve({
+                ...chatRequest,
+                messages: [...chatRequest.messages, {
+                    name: 'fetch_abi',
+                    id: nanoid(),
+                    role: 'function',
+                    content: abi
+                }]
+            });
+        } catch (error : any) {
+            return Promise.resolve({
+                ...chatRequest,
+                messages: [...chatRequest.messages, {
+                    name: 'fetch_abi',
+                    id: nanoid(),
+                    role: 'function',
+                    content: error.message
+                }] 
+            });
+            // Handle error as needed, maybe add an error message to the chat?
+        }
     }
 
-    return Promise.resolve({
-        ...chatRequest,
-        messages: [...chatRequest.messages, {
-            name: 'get_current_weather',
-            id: nanoid(),
-            role: 'function',
-            content: 'The weather is 72 degrees and sunny.',
-        }]
-    });
-    // }
+    return Promise.resolve(chatRequest);
+
+    // No arguments provided, handle as needed
 };
 
 export function Chat({id, initialMessages, className}: ChatProps) {
