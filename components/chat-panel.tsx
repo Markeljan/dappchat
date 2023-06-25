@@ -55,7 +55,33 @@ const functions: ChatCompletionFunctions[] = [
       },
       "required": ["requests"]
     }
+  },
+  {
+    "name": "write_contract",
+    "description": "Write data to a smart contract and trigger a transaction for the user to sign.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "The blockchain address where the smart contract is deployed."
+        },
+        "functionName": {
+          "type": "string",
+          "description": "The name of the function in the smart contract to call."
+        },
+        "functionArgs": {
+          "type": "array",
+          "description": "The arguments to pass to the function call.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["address", "functionName", "functionArgs"]
+    }
   }
+
 ];
 
 

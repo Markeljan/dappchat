@@ -1,20 +1,19 @@
 import { Button } from '@/components/ui/button'
-import { ExternalLink } from '@/components/external-link'
 import { IconArrowRight } from '@/components/ui/icons'
 import { UseChatHelpers } from '@/ai-sdk/packages/core/react'
 
 const exampleMessages = [
   {
-    heading: 'swap 100 usdc for eth within the chat app',
-    message: `swap 100 usdc for eth on gnosis using sushiswap \n`
+    heading: "Swap 100 xDAI for DAI on Honeyswap",
+    message: "Swap 100 xDAI for DAI on Gnosis chain using Honeyswap \n"
   },
   {
-    heading: 'Send .001 eth to vitalik.eth',
-    message: 'Send .001 eth to "vitalik.eth" on gnosis chain \n'
+    heading: "Send .001 xDAI to Anon",
+    message: "Send .001 xDAI to Anon on Gnosis \n"
   },
   {
-    heading: 'Get my last transaction on gnosis',
-    message: `Get the details of my last transaction gnosis chain \n`
+    heading: "Get details of Proposal #5 from WAGMI DAO",
+    message: "Get the details of Proposal #5 from WAGMI DAO on Gnosis. \n"
   }
 ]
 

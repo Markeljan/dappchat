@@ -59,7 +59,6 @@ export async function POST(req: Request) {
       console.error(`Request ${index + 1} failed with error: ${response.reason}`);
       return null;  // or handle this case differently based on your requirements
     }
-    console.log("responses success", { data: response.value })
     return { status: 'success', data: response.value } as ReadContractResponseItem;
   });
 

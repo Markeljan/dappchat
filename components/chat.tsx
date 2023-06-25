@@ -6,8 +6,6 @@ import { ChatPanel } from '@/components/chat-panel'
 import { EmptyScreen } from '@/components/empty-screen'
 import { ChatScrollAnchor } from '@/components/chat-scroll-anchor'
 import React, { useState } from 'react'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
 import { Message } from '@/ai-sdk/packages/core/shared/types'
 import {
   FunctionCallHandler,
@@ -21,6 +19,7 @@ import {
 import { nanoid } from 'nanoid'
 import fetchAbi from '@/lib/route-helpers/use-route-fetch-abi'
 import readContract from '@/lib/route-helpers/use-route-read-contract'
+import writeContract from '@/lib/writeContract'
 
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
@@ -95,7 +94,41 @@ const functionCallHandler: FunctionCallHandler = async (
             ]
           });
         }
-      // handle other function names as needed
+      case 'write_contract':
+        try {
+          const writeContractArgs = {
+            ...parsedFunctionCallArguments,
+          };
+
+          const transactionResult = await writeContract(writeContractArgs);
+          console.log("TRANSACTION_RESULT", transactionResult);
+
+          return Promise.resolve({
+            ...chatRequest,
+            messages: [
+              ...chatRequest.messages,
+              {
+                name: 'write_contract',
+                id: nanoid(),
+                role: 'function',
+                content: transactionResult
+              }
+            ]
+          });
+        } catch (error: any) {
+          return Promise.resolve({
+            ...chatRequest,
+            messages: [
+              ...chatRequest.messages,
+              {
+                name: 'write_contract',
+                id: nanoid(),
+                role: 'function',
+                content: error.message
+              }
+            ]
+          });
+        }
 
       default:
         return Promise.resolve(chatRequest);
