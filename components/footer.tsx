@@ -12,8 +12,7 @@ export function FooterText({ className, ...props }: React.ComponentProps<'p'>) {
       )}
       {...props}
     >
-      Built on{' '}
-      <ExternalLink href="https://gnosis.io">Gnosis</ExternalLink> at{' '}
+      Built on <ExternalLink href="https://gnosis.io">Gnosis</ExternalLink> at{' '}
       <ExternalLink href="https://ethglobal.com/events/waterloo2023">
         ETHGlobal Waterloo
       </ExternalLink>

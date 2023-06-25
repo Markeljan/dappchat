@@ -4,10 +4,7 @@ import { auth } from '@/auth'
 import { clearChats } from '@/app/actions'
 import { Sidebar } from '@/components/sidebar'
 import { SidebarList } from '@/components/sidebar-list'
-import {
-  IconNextChat,
-  IconSeparator,
-} from '@/components/ui/icons'
+import { IconNextChat, IconSeparator } from '@/components/ui/icons'
 import { SidebarFooter } from '@/components/sidebar-footer'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { ClearHistory } from '@/components/clear-history'
