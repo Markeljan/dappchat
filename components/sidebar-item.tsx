@@ -12,6 +12,7 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
+import { Message } from '@/ai-sdk/packages/core/react'
 
 interface SidebarItemProps {
   chat: Chat
@@ -21,6 +22,9 @@ interface SidebarItemProps {
 export function SidebarItem({ chat, children }: SidebarItemProps) {
   const pathname = usePathname()
   const isActive = pathname === chat.path
+  const messages: Message[] = chat.messages
+
+  const firstNonSystemMessage = messages.find(message => message.role !== 'system');
 
   if (!chat?.id) return null
 
@@ -49,11 +53,8 @@ export function SidebarItem({ chat, children }: SidebarItemProps) {
           isActive && 'bg-accent'
         )}
       >
-        <div
-          className="relative max-h-5 flex-1 select-none overflow-hidden text-ellipsis break-all"
-          title={chat.title}
-        >
-          <span className="whitespace-nowrap">{chat.title}</span>
+        <div className="relative max-h-5 flex-1 select-none overflow-hidden text-ellipsis break-all" title={chat.title}>
+          <span className="whitespace-nowrap">{firstNonSystemMessage?.content || chat.title}</span>
         </div>
       </Link>
       {isActive && <div className="absolute right-2 top-1">{children}</div>}

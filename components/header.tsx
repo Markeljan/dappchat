@@ -30,8 +30,7 @@ export async function Header() {
           </Sidebar>
         ) : (
           <Link href="/" target="_blank" rel="nofollow">
-            <IconNextChat className="mr-2 h-6 w-6 dark:hidden" inverted />
-            <IconNextChat className="mr-2 hidden h-6 w-6 dark:block" />
+            <img src="/chat-logo.png" className="mr-2 h-8 w-8 dark:hidden" />
           </Link>
         )}
         <div className="flex items-center">

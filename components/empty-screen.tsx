@@ -4,16 +4,16 @@ import { UseChatHelpers } from '@/ai-sdk/packages/core/react'
 
 const exampleMessages = [
   {
-    heading: "Swap 100 xDAI for DAI on Honeyswap",
-    message: "Swap 100 xDAI for DAI on Gnosis chain using Honeyswap \n"
+    heading: "ELI5 the smart contract at this address",
+    message: "What does this contract do? 0x0f38f41cd7ef4793412c58263c7dc54dbd807f73 \n"
   },
   {
-    heading: "Send .001 xDAI to Anon",
-    message: "Send .001 xDAI to Anon on Gnosis \n"
+    heading: "Read the balance of this address for this token",
+    message: "What is the balance of 0x0b01dddd89a019ec63aa36f75549723ea04e0f2ffa6b067316ea13626ded13a5 for account 0x68E08371d1D0311b7c81961c431D71F71a94dd1a? \n"
   },
   {
-    heading: "Get details of Proposal #5 from WAGMI DAO",
-    message: "Get the details of Proposal #5 from WAGMI DAO on Gnosis. \n"
+    heading: "Fetch multiple token values at once",
+    message: "Show me the token uris for tokens 4-8 for contract 0x0f38f41cD7eF4793412C58263C7dC54dbD807f73 \n"
   }
 ]
 
