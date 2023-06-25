@@ -22,15 +22,15 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
     <div className="mx-auto max-w-2xl px-4">
       <div className="rounded-lg border bg-background p-8">
         <h1 className="mb-2 text-lg font-semibold">
-          👋 Hi welcome to dapp chat, I'm Lexi your trusty Web3 AI assistant
+          {"👋 Hi welcome to dapp chat, I'm Lexi your trusty Web3 AI assistant"}
         </h1>
         <p className="mb-2 leading-normal text-muted-foreground">
-          I'm here to make your Web3 experience seamless and exciting! Whether
-          it's swapping tokens, checking your balance or understanding your
-          transactions. I've got you covered!{' '}
+          {"I'm here to make your Web3 experience seamless and exciting! Whether"}
+          it&apos;s swapping tokens, checking your balance or understanding your
+          transactions. {"I've got you covered!"}{' '}
         </p>
         <p className="leading-normal text-muted-foreground">
-          We can start chatting here or try the following examples:
+          {"We can start chatting here or try the following examples:"}
         </p>
         <div className="mt-4 flex flex-col items-start space-y-2">
           {exampleMessages.map((message, index) => (
