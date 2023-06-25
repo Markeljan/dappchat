@@ -1,7 +1,8 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import React from 'react'
 
 const ConnectWallet = () => {
-  return <ConnectButton />;
-};
+  return <ConnectButton />
+}
 
-export default ConnectWallet;
+export default ConnectWallet

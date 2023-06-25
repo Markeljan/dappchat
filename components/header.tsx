@@ -4,19 +4,29 @@ import { auth } from '@/auth'
 import { clearChats } from '@/app/actions'
 import { Sidebar } from '@/components/sidebar'
 import { SidebarList } from '@/components/sidebar-list'
-import {
-  IconNextChat,
-  IconSeparator,
-} from '@/components/ui/icons'
+import { IconNextChat, IconSeparator } from '@/components/ui/icons'
 import { SidebarFooter } from '@/components/sidebar-footer'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { ClearHistory } from '@/components/clear-history'
 import { UserMenu } from '@/components/user-menu'
 import { LoginButton } from '@/components/login-button'
 import ConnectWallet from './connect-wallet'
+import { cookies } from 'next/headers'
 
 export async function Header() {
-  const session = await auth()
+  const cookieStore = cookies()
+  const userCookie = cookieStore.get('sismo')?.value
+  const sismo = userCookie && JSON.parse(userCookie)
+  console.log('🚀 ~ file: header.tsx:22 ~ Header ~ sismo:', sismo)
+
+  const session = {
+    user: {
+      id: sismo?.id,
+      name: sismo?.name
+    }
+  }
+  console.log('session: ------xxxx', session)
+
   return (
     <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-gradient-to-b from-background/10 via-background/50 to-background/80 px-4 backdrop-blur-xl">
       <div className="flex items-center">

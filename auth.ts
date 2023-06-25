@@ -17,27 +17,17 @@ export const {
 } = NextAuth({
   // @ts-ignore
   providers: [
-    process.env.VERCEL_ENV === 'preview'
-      ? CredentialsProvider({
-          name: 'Credentials',
-          credentials: {
-            username: {
-              label: 'Username',
-              type: 'text',
-              placeholder: 'jsmith'
-            },
-            password: { label: 'Password', type: 'password' }
-          },
-          async authorize(credentials) {
-            return {
-              id: 1,
-              name: 'J Smith',
-              email: 'jsmith@example.com',
-              picture: 'https://i.pravatar.cc/150?u=jsmith@example.com'
-            } as any
-          }
-        })
-      : GitHub
+    CredentialsProvider({
+      name: 'sismo',
+      async authorize(credentials) {
+        return {
+          id: credentials.id,
+          name: 'J Smith',
+          email: 'jsmith@example.com',
+          picture: 'https://i.pravatar.cc/150?u=jsmith@example.com'
+        } as any
+      }
+    })
   ],
   callbacks: {
     // @ts-ignore
@@ -57,8 +47,8 @@ export const {
   ...(process.env.VERCEL_ENV === 'preview'
     ? {}
     : {
-        pages: {
-          signIn: '/sign-in'
-        }
-      })
+      pages: {
+        signIn: '/sign-in'
+      }
+    })
 })
