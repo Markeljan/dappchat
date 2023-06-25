@@ -1,8 +1,7 @@
-
 import { Button } from '@/components/ui/button'
 import { ExternalLink } from '@/components/external-link'
 import { IconArrowRight } from '@/components/ui/icons'
-import {UseChatHelpers} from "@/ai-sdk/packages/core/react";
+import { UseChatHelpers } from '@/ai-sdk/packages/core/react'
 
 const exampleMessages = [
   {

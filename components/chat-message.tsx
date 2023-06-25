@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 
@@ -7,14 +7,13 @@ import { CodeBlock } from '@/components/ui/codeblock'
 import { MemoizedReactMarkdown } from '@/components/markdown'
 import { IconF, IconOpenAI, IconUser } from '@/components/ui/icons'
 import { ChatMessageActions } from '@/components/chat-message-actions'
-import { Message } from "@/ai-sdk/packages/core/shared/types";
+import { Message } from '@/ai-sdk/packages/core/shared/types'
 
 export interface ChatMessageProps {
   message: Message
 }
 
 export function ChatMessage({ message, ...props }: ChatMessageProps) {
-
   return (
     <div
       className={cn('group relative mb-4 flex items-start md:-ml-12')}
@@ -28,7 +27,13 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
             : 'bg-primary text-primary-foreground'
         )}
       >
-        {message.role === 'user' ? <IconUser /> : message.role === 'function' ? <IconF /> : <IconOpenAI />}
+        {message.role === 'user' ? (
+          <IconUser />
+        ) : message.role === 'function' ? (
+          <IconF />
+        ) : (
+          <IconOpenAI />
+        )}
       </div>
       <div className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
         <MemoizedReactMarkdown
@@ -70,7 +75,11 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
             }
           }}
         >
-          {(message.content === '') ? (typeof message.function_call === 'string' ? message.function_call : JSON.stringify(message.function_call)) : message.content ?? ''}
+          {message.content === ''
+            ? typeof message.function_call === 'string'
+              ? message.function_call
+              : JSON.stringify(message.function_call)
+            : message.content ?? ''}
         </MemoizedReactMarkdown>
         <ChatMessageActions message={message} />
       </div>

@@ -1,7 +1,6 @@
-
 import { Separator } from '@/components/ui/separator'
 import { ChatMessage } from '@/components/chat-message'
-import {Message} from "@/ai-sdk/packages/core/shared/types";
+import { Message } from '@/ai-sdk/packages/core/shared/types'
 
 export interface ChatList {
   messages: Message[]
@@ -14,15 +13,17 @@ export function ChatList({ messages }: ChatList) {
 
   return (
     <div className="relative mx-auto max-w-2xl px-4">
-      {messages.map((message, index) => (
-        !message.name &&
-        <div key={index}>
-          <ChatMessage message={message} />
-          {index < messages.length - 1 && (
-            <Separator className="my-4 md:my-8" />
-          )}
-        </div>
-      ))}
+      {messages.map(
+        (message, index) =>
+          !message.name && (
+            <div key={index}>
+              <ChatMessage message={message} />
+              {index < messages.length - 1 && (
+                <Separator className="my-4 md:my-8" />
+              )}
+            </div>
+          )
+      )}
     </div>
   )
 }
