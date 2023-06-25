@@ -30,7 +30,7 @@ export async function Header() {
           </Sidebar>
         ) : (
           <Link href="/" target="_blank" rel="nofollow">
-            <img src="/chat-logo.png" className="mr-2 h-8 w-8 dark:hidden" />
+            <img src="/chat-logo.png" className="mr-2 h-8 w-8" />
           </Link>
         )}
         <div className="flex items-center">
