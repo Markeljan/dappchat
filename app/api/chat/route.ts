@@ -34,12 +34,8 @@ export async function POST(req: Request) {
     functions,
     function_call
   });
-
-  console.log('Response:', res);
-
   const stream = OpenAIStream(res, {
     async onCompletion(completion) {
-      console.log('Completion:', completion);
 
       const title = json.messages[0].content.substring(0, 100);
       const userId = session?.user.id;
@@ -62,8 +58,6 @@ export async function POST(req: Request) {
             }
           ]
         };
-
-        console.log('Payload:', payload);
 
         await kv.hmset(`chat:${id}`, payload);
         await kv.zadd(`user:chat:${userId}`, {

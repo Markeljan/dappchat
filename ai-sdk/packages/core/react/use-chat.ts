@@ -121,7 +121,19 @@ export function useChat({
           // immediately.
           const previousMessages = messagesRef.current;
           mutate(openAIChatRequest.messages, false);
-
+          console.log("Sending request:", {
+            messages: sendExtraMessageFields
+              ? openAIChatRequest.messages
+              : openAIChatRequest.messages.map(({ role, content, name, function_call }) => ({
+                role,
+                content: typeof content !== 'string' ? JSON.stringify(content) : content,
+                ...(name !== undefined && { name }),
+                ...(function_call !== undefined && { function_call: function_call })
+              })),
+            ...extraMetadataRef.current.body,
+            ...(openAIChatRequest.functions !== undefined && { functions: openAIChatRequest.functions }),
+            ...(openAIChatRequest.function_call !== undefined && { function_call: openAIChatRequest.function_call })
+          });
           const res = await fetch(api, {
             method: 'POST',
             body: JSON.stringify({
@@ -129,9 +141,9 @@ export function useChat({
                 ? openAIChatRequest.messages
                 : openAIChatRequest.messages.map(({ role, content, name, function_call }) => ({
                   role,
-                  content,
+                  content: typeof content !== 'string' ? JSON.stringify(content) : content,
                   ...(name !== undefined && { name }),
-                  ...(function_call !== undefined && { function_call: function_call })
+                  ...(function_call !== undefined && { function_call })
                 })),
               ...extraMetadataRef.current.body,
               ...(openAIChatRequest.functions !== undefined && { functions: openAIChatRequest.functions }),
@@ -180,6 +192,7 @@ export function useChat({
             result += decodeAIStreamChunk(value);
 
             if (result.startsWith('{"function_call":')) {
+              console.log("streaming function call")
             // While the function call is streaming, it will be a string.
               responseMessage = {
                 id: replyId,
@@ -189,6 +202,7 @@ export function useChat({
                 function_call: result
               };
             } else {
+              console.log("Finished streaming function call")
               responseMessage = {
                 id: replyId,
                 createdAt,

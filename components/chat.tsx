@@ -68,6 +68,7 @@ const functionCallHandler: FunctionCallHandler = async (
       case 'read_contract':
         try {
           const contractData = await readContract(parsedFunctionCallArguments.requests);
+          console.log("CONTRACT_DATA", contractData);
           return Promise.resolve({
             ...chatRequest,
             messages: [

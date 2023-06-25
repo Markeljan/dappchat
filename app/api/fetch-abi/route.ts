@@ -1,4 +1,3 @@
-import { EXPLORER_CONFIGS } from '@/lib/explorerUtils'
 import fetchAbi from '@/lib/fetchAbi'
 
 export const runtime = 'edge'

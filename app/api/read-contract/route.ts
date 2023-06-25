@@ -21,25 +21,20 @@ export async function POST(req: Request) {
     return new Response('Unauthorized', { status: 401 });
   }
 
-
-  const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-
   const publicClient = createPublicClient({
     chain: gnosis,
     transport: QUICKNODE_API_KEY ? http(`https://wiser-wispy-forest.xdai.quiknode.pro/${QUICKNODE_API_KEY}`) : http(),
   });
-  console.log("requests", requests)
+
   // Create an object to store ABIs
   const ABIs: { [key: string]: any } = {};
 
   // Find unique contract addresses
   const uniqueAddresses = Array.from(new Set(requests.map(request => request.address)));
-  console.log("ABIs", ABIs)
+
   // Fetch ABIs for each unique contract
   await Promise.all(uniqueAddresses.map(async (address) => {
-    ABIs[address] = await fetchAbi(address);
+    ABIs[address] = JSON.parse(await fetchAbi(address));
   }));
 
   // Read contract with corresponding ABIs
@@ -64,12 +59,25 @@ export async function POST(req: Request) {
       console.error(`Request ${index + 1} failed with error: ${response.reason}`);
       return null;  // or handle this case differently based on your requirements
     }
+    console.log("responses success", { data: response.value })
     return { status: 'success', data: response.value } as ReadContractResponseItem;
   });
 
-  console.log(responsesArray)
-
-  const responseData = responsesArray.filter(response => response !== null);
-
+  const responseData = responsesArray
+    .filter(response => response !== null)
+    .map(response => {
+      if (response?.data && typeof response.data.value === 'bigint') {
+        return {
+          ...response,
+          data: {
+            ...response.data,
+            value: response.data.value.toString(),
+          }
+        };
+      } else {
+        return response;
+      }
+    });
   return new Response(JSON.stringify(responseData));
+
 }
