@@ -1,21 +1,20 @@
-
 import { Button } from '@/components/ui/button'
 import { ExternalLink } from '@/components/external-link'
 import { IconArrowRight } from '@/components/ui/icons'
-import {UseChatHelpers} from "@/ai-sdk/packages/core/react";
+import { UseChatHelpers } from '@/ai-sdk/packages/core/react'
 
 const exampleMessages = [
   {
-    heading: 'Explain technical concepts',
-    message: `What is a "serverless function"?`
+    heading: 'swap 100 usdc for eth within the chat app',
+    message: `swap 100 usdc for eth on gnosis using sushiswap \n`
   },
   {
-    heading: 'Summarize an article',
-    message: 'Summarize the following article for a 2nd grader: \n'
+    heading: 'Send .001 eth to vitalik.eth',
+    message: 'Send .001 eth to "vitalik.eth" on gnosis chain \n'
   },
   {
-    heading: 'Draft an email',
-    message: `Draft an email to my boss about the following: \n`
+    heading: 'Get my last transaction on gnosis',
+    message: `Get the details of my last transaction gnosis chain \n`
   }
 ]
 
@@ -24,18 +23,15 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
     <div className="mx-auto max-w-2xl px-4">
       <div className="rounded-lg border bg-background p-8">
         <h1 className="mb-2 text-lg font-semibold">
-          Welcome to Next.js AI Chatbot!
+          👋 Hi welcome to dapp chat, I'm Lexi your trusty Web3 AI assistant
         </h1>
         <p className="mb-2 leading-normal text-muted-foreground">
-          This is an open source AI chatbot app template built with{' '}
-          <ExternalLink href="https://nextjs.org">Next.js</ExternalLink> and{' '}
-          <ExternalLink href="https://vercel.com/storage/kv">
-            Vercel KV
-          </ExternalLink>
-          .
+          I'm here to make your Web3 experience seamless and exciting! Whether
+          it's swapping tokens, checking your balance or understanding your
+          transactions. I've got you covered!{' '}
         </p>
         <p className="leading-normal text-muted-foreground">
-          You can start a conversation here or try the following examples:
+          We can start chatting here or try the following examples:
         </p>
         <div className="mt-4 flex flex-col items-start space-y-2">
           {exampleMessages.map((message, index) => (
