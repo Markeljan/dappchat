@@ -8,7 +8,6 @@ import { MemoizedReactMarkdown } from '@/components/markdown'
 import { IconF, IconOpenAI, IconUser } from '@/components/ui/icons'
 import { ChatMessageActions } from '@/components/chat-message-actions'
 import { Message } from '@/ai-sdk/packages/core/shared/types'
-import fetchAbi from '@/lib/fetchAbi'
 
 export interface ChatMessageProps {
   message: Message
@@ -16,11 +15,6 @@ export interface ChatMessageProps {
 
 export function ChatMessage({ message, ...props }: ChatMessageProps) {
   if (message?.role === 'system') return null
-  const isContractFunction = message.role === 'function' && message.name === 'write_contract'
-  if(isContractFunction) {
-  const {address, functionName, functionArgs} = message.content as {address: string, functionName: string, functionArgs: string[]}
-  const abi = fetchAbi(address)
-  }
 
   return (
     <div
@@ -89,7 +83,6 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
               : JSON.stringify(message.function_call)
             : message.content ?? ''}
         </MemoizedReactMarkdown>
-        {isContractFunction && <TransactionButton />}
         <ChatMessageActions message={message} />
       </div>
     </div>
