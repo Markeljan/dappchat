@@ -12,8 +12,8 @@ import ClientLayout from './client'
 
 export const metadata: Metadata = {
   title: {
-    default: 'dapp chat',
-    template: `dapp chat`
+    default: 'dappchat',
+    template: `dappchat`
   },
   description: 'An AI-powered chat assistant for interacting with Gnosis chain.',
   themeColor: [
