@@ -16,3 +16,15 @@ export type ServerActionResult<Result> = Promise<
       error: string
     }
 >
+
+export type ReadContractRequestItem = {
+  address: `0x${string}`;
+  functionName: string;
+  functionArgs: Array<string | string[]>;
+}
+
+export interface ReadContractResponseItem {
+  status: string;
+  data: any;
+}
+

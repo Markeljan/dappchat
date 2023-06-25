@@ -1,7 +1,6 @@
 // fetchAbi.ts
-import { Chain } from 'viem'
 
-export const fetchAbi = async (chain: Chain, address: string) => {
+const fetchAbi = async (address: `0x${string}`) => {
   const response = await fetch('/api/fetch-abi', {
     method: 'POST',
     body: JSON.stringify({
@@ -16,3 +15,5 @@ export const fetchAbi = async (chain: Chain, address: string) => {
   const data = await response.json()
   return data
 }
+
+export default fetchAbi

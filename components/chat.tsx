@@ -5,15 +5,6 @@ import { ChatList } from '@/components/chat-list'
 import { ChatPanel } from '@/components/chat-panel'
 import { EmptyScreen } from '@/components/empty-screen'
 import { ChatScrollAnchor } from '@/components/chat-scroll-anchor'
-import { useLocalStorage } from '@/lib/hooks/use-local-storage'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog'
 import React, { useState } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
@@ -28,74 +19,100 @@ import {
   ChatCompletionRequestMessageFunctionCall
 } from 'openai-edge'
 import { nanoid } from 'nanoid'
-import { fetchAbi } from '@/lib/hooks/use-fetch-abi'
-import { getChainByName } from '@/lib/viemUtils'
-
-const IS_PREVIEW = process.env.VERCEL_ENV === 'preview'
+import fetchAbi from '@/lib/route-helpers/use-route-fetch-abi'
+import readContract from '@/lib/route-helpers/use-route-read-contract'
 
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
   id?: string
 }
-
 const functionCallHandler: FunctionCallHandler = async (
   functionCall: ChatCompletionRequestMessageFunctionCall,
   chatRequest: OpenAIChatRequest
 ) => {
   if (functionCall.arguments != null) {
     const parsedFunctionCallArguments = JSON.parse(functionCall.arguments)
-    const chain = getChainByName(parsedFunctionCallArguments.chain)
-    try {
-      const abi = await fetchAbi(chain, parsedFunctionCallArguments.address)
-      return Promise.resolve({
-        ...chatRequest,
-        messages: [
-          ...chatRequest.messages,
-          {
-            name: 'fetch_abi',
-            id: nanoid(),
-            role: 'function',
-            content: abi
-          }
-        ]
-      })
-    } catch (error: any) {
-      return Promise.resolve({
-        ...chatRequest,
-        messages: [
-          ...chatRequest.messages,
-          {
-            name: 'fetch_abi',
-            id: nanoid(),
-            role: 'function',
-            content: error.message
-          }
-        ]
-      })
-      // Handle error as needed, maybe add an error message to the chat?
+
+    switch (functionCall.name) {
+      case 'fetch_abi':
+        try {
+          const abi = await fetchAbi(parsedFunctionCallArguments.address);
+          return Promise.resolve({
+            ...chatRequest,
+            messages: [
+              ...chatRequest.messages,
+              {
+                name: 'fetch_abi',
+                id: nanoid(),
+                role: 'function',
+                content: abi
+              }
+            ]
+          });
+        } catch (error: any) {
+          return Promise.resolve({
+            ...chatRequest,
+            messages: [
+              ...chatRequest.messages,
+              {
+                name: 'fetch_abi',
+                id: nanoid(),
+                role: 'function',
+                content: error.message
+              }
+            ]
+          });
+          // Handle error as needed, maybe add an error message to the chat?
+        }
+
+      case 'read_contract':
+        try {
+          const contractData = await readContract(parsedFunctionCallArguments.requests);
+          return Promise.resolve({
+            ...chatRequest,
+            messages: [
+              ...chatRequest.messages,
+              {
+                name: 'read_contract',
+                id: nanoid(),
+                role: 'function',
+                content: contractData
+              }
+            ]
+          });
+        } catch (error: any) {
+          return Promise.resolve({
+            ...chatRequest,
+            messages: [
+              ...chatRequest.messages,
+              {
+                name: 'read_contract',
+                id: nanoid(),
+                role: 'function',
+                content: error.message
+              }
+            ]
+          });
+        }
+      // handle other function names as needed
+
+      default:
+        return Promise.resolve(chatRequest);
     }
   }
 
-  return Promise.resolve(chatRequest)
-
+  return Promise.resolve(chatRequest);
   // No arguments provided, handle as needed
 }
 
 export function Chat({ id, initialMessages, className }: ChatProps) {
-  const [previewToken, setPreviewToken] = useLocalStorage<string | null>(
-    'ai-token',
-    null
-  )
-  const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
-  const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
   const { messages, append, reload, stop, isLoading, input, setInput } =
     useChat({
       functionCallHandler,
       initialMessages,
       id,
       body: {
-        id,
-        previewToken
+        id
       }
     })
   return (
@@ -120,42 +137,6 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         input={input}
         setInput={setInput}
       />
-
-      <Dialog open={previewTokenDialog} onOpenChange={setPreviewTokenDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Enter your OpenAI Key</DialogTitle>
-            <DialogDescription>
-              If you have not obtained your OpenAI API key, you can do so by{' '}
-              <a
-                href="https://platform.openai.com/signup/"
-                className="underline"
-              >
-                signing up
-              </a>{' '}
-              on the OpenAI website. This is only necessary for preview
-              environments so that the open source community can test the app.
-              The token will be saved to your browser&apos;s local storage under
-              the name <code className="font-mono">ai-token</code>.
-            </DialogDescription>
-          </DialogHeader>
-          <Input
-            value={previewTokenInput}
-            placeholder="OpenAI API key"
-            onChange={e => setPreviewTokenInput(e.target.value)}
-          />
-          <DialogFooter className="items-center">
-            <Button
-              onClick={() => {
-                setPreviewToken(previewTokenInput)
-                setPreviewTokenDialog(false)
-              }}
-            >
-              Save Token
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   )
 }

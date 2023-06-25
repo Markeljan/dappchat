@@ -20,8 +20,44 @@ const functions: ChatCompletionFunctions[] = [
       },
       "required": ["address"]
     }
+  },
+  {
+    "name": "read_contract",
+    "description": "Read smart contract data using multiple requests.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "requests": {
+          "type": "array",
+          "description": "An array of ReadContractRequestItem objects containing the details of each request.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string",
+                "description": "The blockchain address where the smart contract is deployed."
+              },
+              "functionName": {
+                "type": "string",
+                "description": "The name of the function in the smart contract to call."
+              },
+              "functionArgs": {
+                "type": "array",
+                "description": "The arguments to pass to the function call.",
+                "items": {
+                  "type": "string" // You may need to adjust this depending on the type of your function arguments
+                }
+              }
+            },
+            "required": ["address", "functionName", "functionArgs"]
+          }
+        }
+      },
+      "required": ["requests"]
+    }
   }
-]
+];
+
 
 export interface ChatPanelProps
   extends Pick<
