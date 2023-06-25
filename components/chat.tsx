@@ -94,41 +94,37 @@ const functionCallHandler: FunctionCallHandler = async (
             ]
           });
         }
-      // case 'write_contract':
-      //   try {
-      //     const writeContractArgs = {
-      //       ...parsedFunctionCallArguments,
-      //     };
-
-      //     const transactionResult = await writeContract(writeContractArgs);
-      //     console.log("TRANSACTION_RESULT", transactionResult);
-
-      //     return Promise.resolve({
-      //       ...chatRequest,
-      //       messages: [
-      //         ...chatRequest.messages,
-      //         {
-      //           name: 'write_contract',
-      //           id: nanoid(),
-      //           role: 'function',
-      //           content: transactionResult
-      //         }
-      //       ]
-      //     });
-      //   } catch (error: any) {
-      //     return Promise.resolve({
-      //       ...chatRequest,
-      //       messages: [
-      //         ...chatRequest.messages,
-      //         {
-      //           name: 'write_contract',
-      //           id: nanoid(),
-      //           role: 'function',
-      //           content: error.message
-      //         }
-      //       ]
-      //     });
-      //   }
+      case 'write_contract':
+        try {
+          const writeContractArgs = {
+            ...parsedFunctionCallArguments,
+          };
+          return Promise.resolve({
+            ...chatRequest,
+            messages: [
+              ...chatRequest.messages,
+              {
+                name: 'write_contract',
+                id: nanoid(),
+                role: 'function',
+                content: writeContractArgs
+              }
+            ]
+          });
+        } catch (error: any) {
+          return Promise.resolve({
+            ...chatRequest,
+            messages: [
+              ...chatRequest.messages,
+              {
+                name: 'write_contract',
+                id: nanoid(),
+                role: 'function',
+                content: error.message
+              }
+            ]
+          });
+        }
 
       default:
         return Promise.resolve(chatRequest);
@@ -150,7 +146,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       }
     })
   constants
-  
+
   return (
     <>
       <div className={cn('pb-[200px] pt-4 md:pt-10', className)}>
