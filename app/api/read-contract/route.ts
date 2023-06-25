@@ -8,12 +8,15 @@ import {
   StreamingTextResponse
 } from '@/ai-sdk/packages/core/streams'
 import { createPublicClient, http } from 'viem'
+import { gnosis } from 'viem/chains'
 
 export const runtime = 'edge'
 
+const QUICKNODE_API_KEY = process.env.NEXT_PUBLIC_QUICKNODE_API_KEY || ''
+
 export async function POST(req: Request) {
   const json = await req.json()
-  const { chain, rpcUrl, requests, previewToken } = json
+  const { requests } = json
   const session = await auth()
 
   if (process.env.VERCEL_ENV !== 'preview') {
@@ -23,14 +26,14 @@ export async function POST(req: Request) {
   }
 
   const configuration = new Configuration({
-    apiKey: previewToken || process.env.OPENAI_API_KEY
+    apiKey: process.env.OPENAI_API_KEY
   })
 
   const openai = new OpenAIApi(configuration)
 
   const publicClient = createPublicClient({
-    chain: chain,
-    transport: rpcUrl ? http(rpcUrl) : http()
+    chain: gnosis,
+    transport: QUICKNODE_API_KEY ? http(`https://wiser-wispy-forest.xdai.quiknode.pro/${QUICKNODE_API_KEY}`) : http()
   })
 
   // const ABI = await fetchAbi(viemChain, requests[0].address);

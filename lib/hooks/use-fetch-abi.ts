@@ -5,7 +5,6 @@ export const fetchAbi = async (chain: Chain, address: string) => {
   const response = await fetch('/api/fetch-abi', {
     method: 'POST',
     body: JSON.stringify({
-      chain: chain,
       address: address
     })
   })

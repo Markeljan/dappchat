@@ -8,24 +8,17 @@ import { ChatCompletionFunctions } from 'openai-edge'
 
 const functions: ChatCompletionFunctions[] = [
   {
-    name: 'fetch_abi',
-    description:
-      'Fetch the ABI of a deployed smart contract on a specified EVM-compatible blockchain.',
-    parameters: {
-      type: 'object',
-      properties: {
-        chain: {
-          type: 'string',
-          description:
-            'The name of the blockchain network where the contract is deployed.'
-        },
-        address: {
-          type: 'string',
-          description:
-            'The blockchain address where the smart contract is deployed.'
+    "name": "fetch_abi",
+    "description": "Fetch the ABI of a deployed smart contract on the Gnosis blockchain.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "The blockchain address where the smart contract is deployed."
         }
       },
-      required: ['chain', 'address']
+      "required": ["address"]
     }
   }
 ]
